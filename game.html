@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Me a Millionaire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            margin: auto;
+            max-width: 600px;
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #e74c3c;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            margin-top: 20px;
+        }
+
+        .option {
+            padding: 10px;
+            margin: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #bdc3c7;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Add audio element (hidden for now) -->
+    <audio id="game-audio" loop>
+        <source src="singbd.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="game-container">
+        <h1>Make me reytch asf</h1>
+        <button id="start-btn" onclick="startGame()">Start Game</button>
+
+        <p class="question" id="question"></p>
+
+        <div id="options" class="options">
+            <!-- Options will appear here -->
+        </div>
+
+        <p id="score" class="message">Question 1 of 20</p>
+        <p id="message" class="message"></p>
+        <button id="next-btn" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        // List of questions, each with 3 options and the index of the correct answer
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "Berlin", "Madrid"],
+                correct: 0
+            },
+            {
+                question: "What is the square root of 64?",
+                options: ["6", "8", "10"],
+                correct: 1
+            },
+            {
+                question: "Who wrote 'Romeo and Juliet'?",
+                options: ["Shakespeare", "Dickens", "Hemingway"],
+                correct: 0
+            },
+            {
+                question: "What is the largest ocean on Earth?",
+                options: ["Atlantic", "Indian", "Pacific"],
+                correct: 2
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: ["Da Vinci", "Van Gogh", "Picasso"],
+                correct: 0
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter"],
+                correct: 1
+            },
+            {
+                question: "What is the hardest natural substance on Earth?",
+                options: ["Gold", "Iron", "Diamond"],
+                correct: 2
+            },
+            {
+                question: "Which country is known as the Land of the Rising Sun?",
+                options: ["China", "South Korea", "Japan"],
+                correct: 2
+            },
+            {
+                question: "Who discovered gravity?",
+                options: ["Newton", "Einstein", "Galileo"],
+                correct: 0
+            },
+            {
+                question: "What is the chemical symbol for water?",
+                options: ["O2", "H2O", "CO2"],
+                correct: 1
+            },
+            {
+                question: "Which continent is known as the 'Dark Continent'?",
+                options: ["Africa", "Asia", "Europe"],
+                correct: 0
+            },
+            {
+                question: "What is the longest river in the world?",
+                options: ["Amazon", "Nile", "Ganges"],
+                correct: 1
+            },
+            {
+                question: "Who invented the telephone?",
+                options: ["Edison", "Tesla", "Bell"],
+                correct: 2
+            },
+            {
+                question: "What is the largest mammal on Earth?",
+                options: ["Elephant", "Blue Whale", "Giraffe"],
+                correct: 1
+            },
+            {
+                question: "Which gas do plants absorb from the atmosphere for photosynthesis?",
+                options: ["Oxygen", "Carbon Dioxide", "Nitrogen"],
+                correct: 1
+            },
+            {
+                question: "What is the currency of Japan?",
+                options: ["Yuan", "Won", "Yen"],
+                correct: 2
+            },
+            {
+                question: "Which element has the chemical symbol 'O'?",
+                options: ["Oxygen", "Osmium", "Ozone"],
+                correct: 0
+            },
+            {
+                question: "Who was the first President of the United States?",
+                options: ["Abraham Lincoln", "George Washington", "Thomas Jefferson"],
+                correct: 1
+            },
+            {
+                question: "What is the largest desert on Earth?",
+                options: ["Sahara", "Arabian", "Antarctic"],
+                correct: 2
+            },
+            {
+                question: "Which planet is closest to the Sun?",
+                options: ["Venus", "Earth", "Mercury"],
+                correct: 2
+            },
+            {
+                question: "Who was the first man to walk on the moon?",
+                options: ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // Start the game by playing the audio and loading the first question
+        function startGame() {
+            // Play the audio when the game starts
+            const audio = document.getElementById("game-audio");
+            audio.play();
+
+            // Hide the "Start Game" button
+            document.getElementById("start-btn").style.display = "none";
+
+            loadQuestion();
+        }
+
+        // Load the current question
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question").textContent = currentQuestion.question;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+
+            // Display the options for the current question
+            currentQuestion.options.forEach((option, index) => {
+                const optionDiv = document.createElement("div");
+                optionDiv.classList.add("option");
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => checkAnswer(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById("score").textContent = `Question ${currentQuestionIndex + 1} of 20`;
+            document.getElementById("message").textContent = "";
+        }
+
+        // Check if the answer is correct
+        function checkAnswer(selectedIndex) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const messageElement = document.getElementById("message");
+
+            if (selectedIndex === currentQuestion.correct) {
+                score += 10;
+                messageElement.textContent = "Correct! Well done!";
+            } else {
+                messageElement.textContent = "Incorrect! Try again.";
+            }
+
+            // Disable options after an answer is selected
+            const options = document.querySelectorAll(".option");
+            options.forEach(option => option.style.pointerEvents = "none");
+            document.getElementById("next-btn").style.display = "inline-block";
+        }
+
+        // Move to the next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+                document.getElementById("next-btn").style.display = "none";
+            } else {
+                document.getElementById("message").textContent = "You won! Claim your prize!";
+                document.getElementById("score").textContent = `Final Score: ${score}`;
+                document.getElementById("next-btn").style.display = "none"; // Hide "Next Question" button
+            }
+        }
+    </script>
+
+</body>
+</html>

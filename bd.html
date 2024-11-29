@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Greeting</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #002b5c;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .envelope {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            background: #1e90ff;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.5s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .envelope:hover {
+            transform: scale(1.1);
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background: #1c7ed6;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            transition: transform 0.5s;
+        }
+
+        .flap.open {
+            transform: rotateX(180deg);
+            transform-origin: top;
+        }
+
+        .message {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #1c7ed6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="flap" id="flap"></div>
+        </div>
+        <div class="message" id="message">
+            <h1>Happy Birthday!</h1>
+            <p>Wishing you a day filled with love and joy!HUHEUEHUE</p>
+            <p>Gi tuyo nko to na dli ko mag greet ha, wala nko na limtan imo bd 😤😤. Anyways, enjoy this po!! </p>
+            <p>-pinaka greenflag, caring, talented na friend</p>
+            <a href="game.html" class="button">Proceed</a>
+        </div>
+    </div>
+
+    <audio id="birthday-music" src="bdsong.mp3" preload="auto"></audio>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const flap = document.getElementById('flap');
+        const message = document.getElementById('message');
+        const birthdayMusic = document.getElementById('birthday-music');
+
+        envelope.addEventListener('click', () => {
+            birthdayMusic.play();
+            flap.classList.add('open');
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                message.style.display = 'block';
+            }, 500); // Wait for the flap animation to finish
+        });
+    </script>
+</body>
+</html>
